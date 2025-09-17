@@ -6,7 +6,6 @@ import { promises } from "dns";
 export class DepartmentPage extends BasePage {
     private readonly gridViewIcon: Locator;
     private readonly listViewIcon: Locator;
-    private readonly loginButton: Locator;
 
     constructor(page: Page) {
         super(page);
