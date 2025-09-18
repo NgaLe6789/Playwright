@@ -28,4 +28,10 @@ export class CartPage extends BasePage {
     async clickToCheckout() {
         await this.checkoutButton.click();
     }
+
+    async assertProductsInCart(items: string[]) {
+        for (let i = 0; i < items.length; i++) {
+            await expect(this.page.getByRole('row').filter({ has: this.page.getByRole('link', { name: 'Remove'})}).filter({ hasText: 'Bose SoundLink Mini' })).toBeVisible();
+        }
+    }
 }

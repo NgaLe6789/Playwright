@@ -28,14 +28,14 @@ test('Verify users can buy an item successfully', async ({ page }) => {
     email: 'nga.thuy.le@agest.vn',
     odernote: 'NA',
   }
-  
+
   // 1. Open browser and go to https://demo.testarchitect.com/
   await page.goto('https://demo.testarchitect.com/');
   await popupCloseButton.click();
 
   // 2. Login with valid credential
   await loginLink.click();
-  await loginPage.login('nga.thuy.le@agest.vn', 'nga.thuy.le');
+  await loginPage.submitlogin('nga.thuy.le@agest.vn', 'nga.thuy.le');
 
   // 3. Navigate to All departments section
   // 4. Select Electronic Components & Supplies
@@ -53,24 +53,23 @@ test('Verify users can buy an item successfully', async ({ page }) => {
   const addedProduct = await departmentPage.addRandomProductToCart();
   await page.waitForTimeout(1000);
 
+
   // 10. Go to the cart 
   await departmentPage.gotoCart();
-  
+
   // 11. Verify item details in mini content
   await cartPage.assertFirstProductInCart(addedProduct);
 
   // 12. Click on Checkout
   await cartPage.clickToCheckout();
 
-
   // 13. Verify Checkbout page displays
   await checkoutPage.assertCheckoutPageDisplayed();
-  
-  
+
   // 14. Verify item details in order
   // 15. Fill the billing details with default payment method
   await checkoutPage.fillBillingForm(billingDetails, PaymentMethod.CP);
-  
+
   // 16. Click on PLACE ORDER
   await checkoutPage.placeOrder();
 
@@ -80,5 +79,4 @@ test('Verify users can buy an item successfully', async ({ page }) => {
   // 18. Verify the Order details with billing and item information
   await oderStatusPage.assertOrderDetails(billingDetails.email, PaymentMethod.CP);
 
-  
 });
