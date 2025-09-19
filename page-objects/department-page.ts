@@ -14,12 +14,6 @@ export class DepartmentPage extends BasePage {
     }
 
     async checkViewModeSelected(type: 'grid' | 'list') {
-        // if(type = 'grid'){
-        //     await expect(this.gridViewIcon).toHaveClass(/switcher-active/);
-        // } 
-        // else{
-        //     await expect(this.listViewIcon).toHaveClass(/switcher-active/);
-        // }
         await expect(this.page.locator(`.switch-${type}`)).toHaveClass(/switcher-active/);
     }
 
@@ -30,11 +24,12 @@ export class DepartmentPage extends BasePage {
     async addRandomProductToCart(): Promise<Product>{
         const items = this.page.locator('.product');
         const randomItem = items.nth(Math.floor(Math.random() * await items.count()));
+        const randomItemPrice = await randomItem.locator('span:not(.del)').and(randomItem.locator('.woocommerce-Price-amount')).innerText();
 
         const product: Product = {
             category: await randomItem.locator('.products-page-cats').innerText(),
             title: await randomItem.locator('.product-title').innerText(),
-            price: await Number(randomItem.locator('span:not(.del)').and(randomItem.locator('.woocommerce-Price-amount')).innerText),
+            price: Number(randomItemPrice.replace(/[^0-9.-]+/g, '')),
         }
         await randomItem.locator('.product-details a[href*="?add-to-cart"]').click();
         return product;

@@ -11,7 +11,7 @@ export class OrderStatusPage extends BasePage {
 
     async assertPageDisplayed() {
         await this.page.waitForLoadState('load');
-        await expect(await this.page.getByText('Thank you. Your order has been received')).toBeVisible({ timeout: 10_000 });
+        await expect(await this.page.getByText('Thank you. Your order has been received.')).toBeVisible({ timeout: 30_000 });
     }
 
     async assertOrderDetails(emailBilling: string, paymentMethod: string) {

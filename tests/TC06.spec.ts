@@ -8,14 +8,12 @@ import { OrderStatusPage } from '../page-objects/oder-status-page';
 import { HomePage } from '../page-objects/home-page';
 
 test('Verify users can buy multiple item successfully', async ({ page }) => {
-  
   const homePage = new HomePage(page)
-  const loginPage = new LoginPage(page);
   const shopPage = new ShopPage(page);
   const cartPage = new CartPage(page);
   const checkoutPage = new CheckoutPage(page);
   const oderStatusPage = new OrderStatusPage(page);
-  const billingDetails = {
+    const billingDetails = {
       firstName: 'Nga',
       lastName: 'Le',
       company: 'AGEST',
@@ -30,27 +28,21 @@ test('Verify users can buy multiple item successfully', async ({ page }) => {
 }
 
   // 1. Open browser and go to https://demo.testarchitect.com/
-  // 2. Login with valid credentials 
-  await homePage.goToLogin();
-  await loginPage.submitlogin('nga.thuy.le@agest.vn', 'nga.thuy.le');
-  await page.pause();
+  await homePage.lauchPage();
 
-  // 3. Go to Shop page
-  await loginPage.gotoShop();
-   
-  // 4. Select multiple items and add to cart
-  await shopPage.addToCartMultipleItems(["Bose SoundLink Mini", "HP LaserJet P1102 (CE651A)"]);
+  // 2. Navigate to 'Shop' or 'Products' section
+  await homePage.gotoShop();
 
-  // 5. Go to the cart and verify all selected items
+  // 3. Add a product to cart
+  await shopPage.addToCartAnItem("Velleman Vertex K 8400");
+
+  // 4. Click on Cart button
   await shopPage.gotoCart();
-  await cartPage.assertProductsInCart(["Bose SoundLink Mini", "HP LaserJet P1102 (CE651A)"]);
 
-  // 6. Proceed to checkout and confirm order
+  // 5. Proceed to complete order
   await cartPage.clickToCheckout();
-  await checkoutPage.fillBillingForm(billingDetails, PaymentMethod.CP);
+  await checkoutPage.fillBillingForm(billingDetails, PaymentMethod.BT);
   await checkoutPage.placeOrder();
-
-  // 7. Verify order confirmation message
   await oderStatusPage.assertPageDisplayed();
 
 });

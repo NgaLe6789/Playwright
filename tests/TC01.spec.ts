@@ -5,11 +5,11 @@ import { CartPage } from '../page-objects/cart-page';
 import { CheckoutPage } from '../page-objects/checkout-page';
 import { PaymentMethod } from '../data-objects/payment-method';
 import { OrderStatusPage } from '../page-objects/oder-status-page';
+import { HomePage } from '../page-objects/home-page';
 
 test('Verify users can buy an item successfully', async ({ page }) => {
 
-  const popupCloseButton = page.locator('div.popmake').getByRole('button', { name: 'Close' });
-  const loginLink = page.getByRole('link', { name: 'Log in / Sign up' });
+  const homePage = new HomePage(page)
   const loginPage = new LoginPage(page);
   const departmentPage = new DepartmentPage(page);
   const cartPage = new CartPage(page);
@@ -30,11 +30,9 @@ test('Verify users can buy an item successfully', async ({ page }) => {
   }
 
   // 1. Open browser and go to https://demo.testarchitect.com/
-  await page.goto('https://demo.testarchitect.com/');
-  await popupCloseButton.click();
+  await homePage.goToLogin();
 
   // 2. Login with valid credential
-  await loginLink.click();
   await loginPage.submitlogin('nga.thuy.le@agest.vn', 'nga.thuy.le');
 
   // 3. Navigate to All departments section
@@ -52,7 +50,6 @@ test('Verify users can buy an item successfully', async ({ page }) => {
   // 9. Click 'Add to Cart'
   const addedProduct = await departmentPage.addRandomProductToCart();
   await page.waitForTimeout(1000);
-
 
   // 10. Go to the cart 
   await departmentPage.gotoCart();

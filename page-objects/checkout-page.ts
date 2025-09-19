@@ -54,8 +54,10 @@ export class CheckoutPage extends BasePage {
     }
 
     async placeOrder() {
+
+        await this.page.waitForLoadState('load');
         await this.placeOrderButton.waitFor({state: "visible"});
-        await this.placeOrderButton.click();
+        await this.placeOrderButton.click({ timeout: 30_000 });
     }
     
 }

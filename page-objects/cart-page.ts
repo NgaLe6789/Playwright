@@ -1,14 +1,15 @@
-import { expect, Page } from '@playwright/test';
+import { expect, Page, Locator} from '@playwright/test';
 import { BasePage } from './base-page';
 import { Product } from "../data-objects/product";
 
 export class CartPage extends BasePage {
-    private readonly checkoutButton;
+    private readonly checkoutButton: Locator;
+    private readonly clearShoppingCartButton: Locator;
 
     constructor(page: Page) {
         super(page);
         this.checkoutButton = page.getByRole('link', { name: 'PROCEED TO CHECKOUT' });
-        
+        this.clearShoppingCartButton= page.getByText('Clear shopping cart');
     }
 
     async assertFirstProductInCart(firstProduct: Product) {
@@ -31,7 +32,12 @@ export class CartPage extends BasePage {
 
     async assertProductsInCart(items: string[]) {
         for (let i = 0; i < items.length; i++) {
-            await expect(this.page.getByRole('row').filter({ has: this.page.getByRole('link', { name: 'Remove'})}).filter({ hasText: 'Bose SoundLink Mini' })).toBeVisible();
+            await expect(this.page.getByRole('row').filter({ has: this.page.getByRole('link', { name: 'Remove'})}).filter({ hasText: items[i] })).toBeVisible();
         }
     }
+
+    async clearCart() {
+        await this.clearShoppingCartButton.click();
+    }
+
 }

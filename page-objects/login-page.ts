@@ -20,12 +20,4 @@ export class LoginPage extends BasePage {
         await this.passwordTextbox.fill(password);
         await this.loginButton.click();
     }
-
-    async login(username: string, password: string) {
-        await this.page.goto('https://demo.testarchitect.com/');
-        const popupCloseButton = this.page.locator('div.popmake').getByRole('button', { name: 'Close' });
-        await popupCloseButton.click();
-        await this.loginLink.click();
-        await this.submitlogin(username, password);
-    }
 }

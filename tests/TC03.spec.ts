@@ -8,7 +8,6 @@ import { OrderStatusPage } from '../page-objects/oder-status-page';
 import { HomePage } from '../page-objects/home-page';
 
 test('Verify users can buy multiple item successfully', async ({ page }) => {
-  
   const homePage = new HomePage(page)
   const loginPage = new LoginPage(page);
   const shopPage = new ShopPage(page);
@@ -33,24 +32,24 @@ test('Verify users can buy multiple item successfully', async ({ page }) => {
   // 2. Login with valid credentials 
   await homePage.goToLogin();
   await loginPage.submitlogin('nga.thuy.le@agest.vn', 'nga.thuy.le');
-  await page.pause();
 
   // 3. Go to Shop page
   await loginPage.gotoShop();
    
-  // 4. Select multiple items and add to cart
-  await shopPage.addToCartMultipleItems(["Bose SoundLink Mini", "HP LaserJet P1102 (CE651A)"]);
+  // 4. Select an item and add to cart
+  await shopPage.addToCartAnItem("RoboXplorer Robotic");
 
-  // 5. Go to the cart and verify all selected items
+  // 5. Go to Checkout page
   await shopPage.gotoCart();
-  await cartPage.assertProductsInCart(["Bose SoundLink Mini", "HP LaserJet P1102 (CE651A)"]);
-
-  // 6. Proceed to checkout and confirm order
   await cartPage.clickToCheckout();
-  await checkoutPage.fillBillingForm(billingDetails, PaymentMethod.CP);
+
+  // 6.Choose a different payment method (Direct bank transfer, Cash on delivery)
+  await checkoutPage.fillBillingForm(billingDetails, PaymentMethod.COD);
+
+  // 7. Complete the payment process
   await checkoutPage.placeOrder();
 
-  // 7. Verify order confirmation message
+  // 8. Verify order confirmation message
   await oderStatusPage.assertPageDisplayed();
-
+  
 });
