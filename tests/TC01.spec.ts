@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { LoginPage } from '../page-objects/login-page';
 import { DepartmentPage } from '../page-objects/department-page';
 import { CartPage } from '../page-objects/cart-page';
@@ -6,8 +6,9 @@ import { CheckoutPage } from '../page-objects/checkout-page';
 import { PaymentMethod } from '../data-objects/payment-method';
 import { OrderStatusPage } from '../page-objects/oder-status-page';
 import { HomePage } from '../page-objects/home-page';
+import { test} from '../fixtures/my-fixtures';
 
-test('Verify users can buy an item successfully', async ({ page }) => {
+test('Verify users can buy an item successfully', async ({ page, clearCart }) => {
 
   const homePage = new HomePage(page)
   const loginPage = new LoginPage(page);
@@ -34,10 +35,11 @@ test('Verify users can buy an item successfully', async ({ page }) => {
 
   // 2. Login with valid credential
   await loginPage.submitlogin('nga.thuy.le@agest.vn', 'nga.thuy.le');
+  await clearCart();
 
   // 3. Navigate to All departments section
   // 4. Select Electronic Components & Supplies
-  await loginPage.gotoDepartment('Electronic Components & Supplies');
+  await homePage.gotoDepartment('Electronic Components & Supplies');
 
   // 5. Verify the items should be displayed as a grid
   await departmentPage.checkViewModeSelected("list");

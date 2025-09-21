@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { LoginPage } from '../page-objects/login-page';
 import { ShopPage } from '../page-objects/shop-page';
 import { CartPage } from '../page-objects/cart-page';
@@ -6,8 +6,9 @@ import { CheckoutPage } from '../page-objects/checkout-page';
 import { PaymentMethod } from '../data-objects/payment-method';
 import { OrderStatusPage } from '../page-objects/oder-status-page';
 import { HomePage } from '../page-objects/home-page';
+import { test} from '../fixtures/my-fixtures';
 
-test('Verify users can buy multiple item successfully', async ({ page }) => {
+test('Verify users can buy an item using different payment methods (all payment methods)', async ({ page, clearCart }) => {
   const homePage = new HomePage(page)
   const loginPage = new LoginPage(page);
   const shopPage = new ShopPage(page);
@@ -32,6 +33,7 @@ test('Verify users can buy multiple item successfully', async ({ page }) => {
   // 2. Login with valid credentials 
   await homePage.goToLogin();
   await loginPage.submitlogin('nga.thuy.le@agest.vn', 'nga.thuy.le');
+  await clearCart();
 
   // 3. Go to Shop page
   await loginPage.gotoShop();

@@ -7,12 +7,13 @@ export class HomePage extends BasePage {
 
     constructor(page: Page) {
         super(page);
-        this.popupCloseButton = page.locator('div.popmake').getByRole('button', { name: 'Close' });
+        this.popupCloseButton = page.getByRole('button', { name: 'Close' });
         this.loginLink = page.getByRole('link', { name: 'Log in / Sign up' });
+        
     }
 
     async lauchPage() {
-        await this.page.goto('https://demo.testarchitect.com/');
+        await this.page.goto('/');
         await this.popupCloseButton.click();
         await this.page.waitForLoadState('load');
     }

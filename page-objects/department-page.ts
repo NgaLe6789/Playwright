@@ -24,14 +24,14 @@ export class DepartmentPage extends BasePage {
     async addRandomProductToCart(): Promise<Product>{
         const items = this.page.locator('.product');
         const randomItem = items.nth(Math.floor(Math.random() * await items.count()));
-        const randomItemPrice = await randomItem.locator('span:not(.del)').and(randomItem.locator('.woocommerce-Price-amount')).innerText();
+        const randomItemPrice = await randomItem.locator('span.price .amount:not(del .amount)').innerText();
 
         const product: Product = {
             category: await randomItem.locator('.products-page-cats').innerText(),
             title: await randomItem.locator('.product-title').innerText(),
             price: Number(randomItemPrice.replace(/[^0-9.-]+/g, '')),
         }
-        await randomItem.locator('.product-details a[href*="?add-to-cart"]').click();
+        await this.page.getByRole('link', { name: `Add “${product.title}` }).nth(1).click();
         return product;
     }
 
