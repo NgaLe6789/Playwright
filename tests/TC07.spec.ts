@@ -10,19 +10,19 @@ test('Ensure proper error handling when mandatory fields are blank', async ({ pa
   const shopPage = new ShopPage(page);
   const cartPage = new CartPage(page);
   const checkoutPage = new CheckoutPage(page);
-    const billingDetails = {
-      firstName: 'Nga',
-      lastName: 'Le',
-      company: 'AGEST',
-      country: 'Vietnam',
-      address1: '',
-      address2: '',
-      zipcode: '22222',
-      city: 'HCM',
-      phone: '+123456789',
-      email: '',
-      odernote: 'NA',
-}
+  const billingDetails = {
+    firstName: 'Nga',
+    lastName: 'Le',
+    company: 'AGEST',
+    country: 'Vietnam',
+    address1: '',
+    address2: '',
+    zipcode: '22222',
+    city: 'HCM',
+    phone: '+123456789',
+    email: '',
+    odernote: 'NA',
+  }
 
   // User is at checkout
   await homePage.lauchPage();
@@ -38,6 +38,6 @@ test('Ensure proper error handling when mandatory fields are blank', async ({ pa
   await checkoutPage.placeOrder();
 
   //  3. Verify error messages
-  await checkoutPage.assertFailedOrder(billingDetails);
+  await checkoutPage.checkFailedOrder(billingDetails);
 
 });

@@ -1,4 +1,4 @@
-import { Page, Locator,expect}  from "@playwright/test";
+import { Page, Locator, expect } from "@playwright/test";
 import { BasePage } from "./base-page";
 import { Product } from "../data-objects/product";
 import { promises } from "dns";
@@ -21,7 +21,7 @@ export class DepartmentPage extends BasePage {
         await this.page.locator(`.switch-${type}`).click();
     }
 
-    async addRandomProductToCart(): Promise<Product>{
+    async addRandomProductToCart(): Promise<Product> {
         const items = this.page.locator('.product');
         const randomItem = items.nth(Math.floor(Math.random() * await items.count()));
         const randomItemPrice = await randomItem.locator('span.price .amount:not(del .amount)').innerText();

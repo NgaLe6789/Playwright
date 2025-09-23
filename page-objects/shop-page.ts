@@ -10,7 +10,7 @@ export class ShopPage extends BasePage {
 
     constructor(page: Page) {
         super(page);
-        this.addedProductMessage= page.getByText('Product added.');
+        this.addedProductMessage = page.getByText('Product added.');
         this.gridViewIcon = page.locator('.switch-grid');
         this.listViewIcon = page.locator('.switch-list');
         this.sortCombobox = page.getByRole('combobox', { name: 'Shop order' });
@@ -19,7 +19,7 @@ export class ShopPage extends BasePage {
     async addToCartMultipleItems(nameItems: string[]) {
         await this.page.waitForLoadState('load');
         for (let i = 0; i < nameItems.length; i++) {
-            await this.page.getByRole('link', { name: 'Add “' + nameItems[i] }).nth(1).click(); 
+            await this.page.getByRole('link', { name: 'Add “' + nameItems[i] }).nth(1).click();
             await this.addedProductMessage.waitFor({ state: 'visible', timeout: 30_000 });
         };
         await this.addedProductMessage.waitFor({ state: 'hidden', timeout: 30_000 });

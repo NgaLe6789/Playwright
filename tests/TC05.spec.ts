@@ -6,8 +6,9 @@ import { CheckoutPage } from '../page-objects/checkout-page';
 import { PaymentMethod } from '../data-objects/payment-method';
 import { OrderStatusPage } from '../page-objects/oder-status-page';
 import { HomePage } from '../page-objects/home-page';
-import { test} from '../fixtures/my-fixtures';
+import { test } from '../fixtures/my-fixtures';
 import { MyAccountPage } from '../page-objects/myAccount-page';
+import { UserAccount } from '../data-objects/user-account';
 
 test('Verify orders appear in order history', async ({ page, clearCart }) => {
   const homePage = new HomePage(page)
@@ -18,34 +19,34 @@ test('Verify orders appear in order history', async ({ page, clearCart }) => {
   const myAccountPage = new MyAccountPage(page);
   const orderStatusPage = new OrderStatusPage(page);
   const billingDetails1 = {
-      firstName: 'Nga1',
-      lastName: 'Le1',
-      company: 'AGEST',
-      country: 'Vietnam',
-      address1: '253 hoang van thu',
-      address2: '253 hoang van thu',
-      zipcode: '22222',
-      city: 'HCM',
-      phone: '+123456789',
-      email: 'nga.thuy.le@agest.vn',
-      odernote: 'NA',
-}
+    firstName: 'Nga1',
+    lastName: 'Le1',
+    company: 'AGEST',
+    country: 'Vietnam',
+    address1: '253 hoang van thu',
+    address2: '253 hoang van thu',
+    zipcode: '22222',
+    city: 'HCM',
+    phone: '+123456789',
+    email: 'nga.thuy.le@agest.vn',
+    odernote: 'NA',
+  }
 
   const billingDetails2 = {
-      firstName: 'Nga2',
-      lastName: 'Le2',
-      company: 'AGEST',
-      country: 'Vietnam',
-      address1: '500 hoang van thu',
-      address2: '500 hoang van thu',
-      zipcode: '22222',
-      city: 'HCM',
-      phone: '+123456789',
-      email: 'nga.thuy.le@agest.vn',
-      odernote: 'NA',
-}
+    firstName: 'Nga2',
+    lastName: 'Le2',
+    company: 'AGEST',
+    country: 'Vietnam',
+    address1: '500 hoang van thu',
+    address2: '500 hoang van thu',
+    zipcode: '22222',
+    city: 'HCM',
+    phone: '+123456789',
+    email: 'nga.thuy.le@agest.vn',
+    odernote: 'NA',
+  }
   await homePage.goToLogin();
-  await loginPage.submitlogin('nga.thuy.le@agest.vn', 'nga.thuy.le');
+  await loginPage.submitlogin(UserAccount.username, UserAccount.password);
   await clearCart();
 
   // Oder 1
@@ -72,7 +73,7 @@ test('Verify orders appear in order history', async ({ page, clearCart }) => {
   await myAccountPage.clickOrders();
 
   // 3. Verify order details
-  await myAccountPage.assertOrderDetails(orderNmber1, billingDetails1);
-  await myAccountPage.assertOrderDetails(orderNmber2, billingDetails2);
+  await myAccountPage.checkOrderDetails(orderNmber1, billingDetails1);
+  await myAccountPage.checkOrderDetails(orderNmber2, billingDetails2);
 
 });

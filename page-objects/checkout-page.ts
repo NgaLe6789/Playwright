@@ -36,14 +36,14 @@ export class CheckoutPage extends BasePage {
         this.alertMessage = page.getByRole('alert');
     }
 
-    async assertCheckoutPageDisplayed() {
+    async checkCheckoutPageDisplayed() {
         await this.page.waitForLoadState('load');
         await expect(this.page.getByText('Hurry up, these products are limited, checkout within')).toBeVisible({ timeout: 10_000 });
     }
 
     async fillBillingForm(data: BillingDetails, method: string) {
         await this.page.waitForLoadState('load');
-        await this.firstName.waitFor({state: "visible", timeout: 30_000});
+        await this.firstName.waitFor({ state: "visible", timeout: 30_000 });
         await this.firstName.fill(data.firstName);
         await this.lastName.fill(data.lastName);
         await this.company.fill(data.company);
@@ -58,32 +58,32 @@ export class CheckoutPage extends BasePage {
         await this.odernote.fill(data.odernote);
         if (method) {
             await this.page.getByRole('radio', { name: method }).check({ timeout: 30_000 });
-        }; 
+        };
     }
 
     async placeOrder() {
         await this.page.waitForLoadState('load');
-        await this.placeOrderButton.waitFor({state: "visible", timeout: 30_000});
+        await this.placeOrderButton.waitFor({ state: "visible", timeout: 30_000 });
         await this.placeOrderButton.click({ timeout: 30_000 });
     }
 
-    async assertFailedOrder(data: BillingDetails) {
+    async checkFailedOrder(data: BillingDetails) {
         if (data.firstName.length == 0) {
             await expect(await this.alertMessage).toHaveText('Billing First name is a required field');
-            this.assertBorderColor(this.firstName, 'red');
+            this.checkBorderColor(this.firstName, 'red');
         };
 
         if (data.address1.length == 0) {
             await expect(this.page.getByText('Billing Street address is a required')).toBeVisible();
-            this.assertBorderColor(this.address1, 'red');
+            this.checkBorderColor(this.address1, 'red');
         };
 
         if (data.email.length == 0) {
             await expect(this.page.getByText('Billing Email address is a required field.')).toBeVisible();
-            this.assertBorderColor(this.email, 'red');
+            this.checkBorderColor(this.email, 'red');
         };
 
 
     }
-    
+
 }

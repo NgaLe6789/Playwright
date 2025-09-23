@@ -1,4 +1,5 @@
 import { expect, Locator, Page } from '@playwright/test';
+import { UserAccount } from '../data-objects/user-account';
 
 export class BasePage {
     protected readonly page: Page;
@@ -10,11 +11,12 @@ export class BasePage {
         this.page = page;
         this.cartLink = page.getByRole('link', { name: /\d\s\$/ });
         this.shopLink = page.locator('#menu-main-menu-1').getByRole('link', { name: 'Shop' });
-        this.myAccount = page.getByRole('link', { name: 'nga.thuy.le' });
+        this.myAccount = page.getByRole('link', { name: UserAccount.username });
     }
 
     async gotoDepartment(departmentName: string) {
         await this.page.getByText('All departments').click();
+        await this.page.waitForLoadState('domcontentloaded');
         await this.page.waitForTimeout(1000);
         await this.page.getByRole('listitem').filter({ hasText: departmentName }).click();
     }
@@ -34,7 +36,7 @@ export class BasePage {
         await this.myAccount.click();
     }
 
-    async assertBorderColor(locatorCheck: Locator, color: 'red' | 'blue' ) {
+    async checkBorderColor(locatorCheck: Locator, color: 'red' | 'blue') {
         let expectedColor = '';
         if (color == 'red') {
             expectedColor = 'rgb(198, 40, 40)'

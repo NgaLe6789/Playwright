@@ -9,12 +9,12 @@ export class OrderStatusPage extends BasePage {
         super(page);
     }
 
-    async assertPageDisplayed() {
+    async checkPageDisplayed() {
         await this.page.waitForLoadState('load');
         await expect(await this.page.getByText('Thank you. Your order has been received.')).toBeVisible({ timeout: 30_000 });
     }
 
-    async assertOrderDetails(emailBilling: string, paymentMethod: string) {
+    async checkOrderDetails(emailBilling: string, paymentMethod: string) {
         await expect(await this.page.getByText('Email')).toHaveText(emailBilling);
         await expect(await this.page.getByText('Payment method')).toHaveText(paymentMethod);
     }

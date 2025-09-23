@@ -6,7 +6,8 @@ import { CheckoutPage } from '../page-objects/checkout-page';
 import { PaymentMethod } from '../data-objects/payment-method';
 import { OrderStatusPage } from '../page-objects/oder-status-page';
 import { HomePage } from '../page-objects/home-page';
-import { test} from '../fixtures/my-fixtures';
+import { test } from '../fixtures/my-fixtures';
+import { UserAccount } from '../data-objects/user-account';
 
 test('Verify users can buy an item successfully', async ({ page, clearCart }) => {
 
@@ -34,7 +35,7 @@ test('Verify users can buy an item successfully', async ({ page, clearCart }) =>
   await homePage.goToLogin();
 
   // 2. Login with valid credential
-  await loginPage.submitlogin('nga.thuy.le@agest.vn', 'nga.thuy.le');
+  await loginPage.submitlogin(UserAccount.username, UserAccount.password);
   await clearCart();
 
   // 3. Navigate to All departments section
@@ -57,13 +58,13 @@ test('Verify users can buy an item successfully', async ({ page, clearCart }) =>
   await departmentPage.gotoCart();
 
   // 11. Verify item details in mini content
-  await cartPage.assertFirstProductInCart(addedProduct);
+  await cartPage.checkFirstProductInCart(addedProduct);
 
   // 12. Click on Checkout
   await cartPage.clickToCheckout();
 
   // 13. Verify Checkbout page displays
-  await checkoutPage.assertCheckoutPageDisplayed();
+  await checkoutPage.checkCheckoutPageDisplayed();
 
   // 14. Verify item details in order
   // 15. Fill the billing details with default payment method
@@ -73,9 +74,9 @@ test('Verify users can buy an item successfully', async ({ page, clearCart }) =>
   await checkoutPage.placeOrder();
 
   // 17. Verify Order status page displays
-  await oderStatusPage.assertPageDisplayed();
+  await oderStatusPage.checkPageDisplayed();
 
   // 18. Verify the Order details with billing and item information
-  await oderStatusPage.assertOrderDetails(billingDetails.email, PaymentMethod.CP);
+  await oderStatusPage.checkOrderDetails(billingDetails.email, PaymentMethod.CP);
 
 });

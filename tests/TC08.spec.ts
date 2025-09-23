@@ -3,6 +3,7 @@ import { LoginPage } from '../page-objects/login-page';
 import { ShopPage } from '../page-objects/shop-page';
 import { CartPage } from '../page-objects/cart-page';
 import { HomePage } from '../page-objects/home-page';
+import { UserAccount } from '../data-objects/user-account';
 
 test('Verify users can clear the cart', async ({ page }) => {
   const homePage = new HomePage(page);
@@ -13,17 +14,16 @@ test('Verify users can clear the cart', async ({ page }) => {
   // 1. Open browser and go to https://demo.testarchitect.com/
   // 2. Login with valid credentials 
   await homePage.goToLogin();
-  await loginPage.submitlogin('nga.thuy.le@agest.vn', 'nga.thuy.le');
+  await loginPage.submitlogin(UserAccount.username, UserAccount.password);
 
   // 3. Go to Shop page
   await loginPage.gotoShop();
-    await page.pause();
   await shopPage.addToCartMultipleItems(["Bose SoundLink Mini", "HP LaserJet P1102 (CE651A)"]);
   await shopPage.gotoCart();
-   
+
   // 4. Verify items show in table
-  await cartPage.assertProductsInCart(["Bose SoundLink Mini", "HP LaserJet P1102 (CE651A)"]);
-  
+  await cartPage.checkProductsInCart(["Bose SoundLink Mini", "HP LaserJet P1102 (CE651A)"]);
+
   // 5. Click on Clear shopping cart
   await cartPage.clickClearCart();
 

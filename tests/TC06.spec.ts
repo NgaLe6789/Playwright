@@ -12,19 +12,19 @@ test('Verify users try to buy an item without logging in (As a guest)', async ({
   const cartPage = new CartPage(page);
   const checkoutPage = new CheckoutPage(page);
   const oderStatusPage = new OrderStatusPage(page);
-    const billingDetails = {
-      firstName: 'Nga',
-      lastName: 'Le',
-      company: 'AGEST',
-      country: 'Vietnam',
-      address1: '253 hoang van thu',
-      address2: '253 hoang van thu',
-      zipcode: '22222',
-      city: 'HCM',
-      phone: '+123456789',
-      email: 'nga.thuy.le@agest.vn',
-      odernote: 'NA',
-}
+  const billingDetails = {
+    firstName: 'Nga',
+    lastName: 'Le',
+    company: 'AGEST',
+    country: 'Vietnam',
+    address1: '253 hoang van thu',
+    address2: '253 hoang van thu',
+    zipcode: '22222',
+    city: 'HCM',
+    phone: '+123456789',
+    email: 'nga.thuy.le@agest.vn',
+    odernote: 'NA',
+  }
 
   // 1. Open browser and go to https://demo.testarchitect.com/
   await homePage.lauchPage();
@@ -42,6 +42,6 @@ test('Verify users try to buy an item without logging in (As a guest)', async ({
   await cartPage.clickToCheckout();
   await checkoutPage.fillBillingForm(billingDetails, PaymentMethod.BT);
   await checkoutPage.placeOrder();
-  await oderStatusPage.assertPageDisplayed();
+  await oderStatusPage.checkPageDisplayed();
 
 });

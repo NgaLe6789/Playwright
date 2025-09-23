@@ -9,7 +9,7 @@ export class HomePage extends BasePage {
         super(page);
         this.popupCloseButton = page.getByRole('button', { name: 'Close' });
         this.loginLink = page.getByRole('link', { name: 'Log in / Sign up' });
-        
+
     }
 
     async lauchPage() {

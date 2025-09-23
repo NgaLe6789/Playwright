@@ -6,10 +6,11 @@ import { CheckoutPage } from '../page-objects/checkout-page';
 import { PaymentMethod } from '../data-objects/payment-method';
 import { OrderStatusPage } from '../page-objects/oder-status-page';
 import { HomePage } from '../page-objects/home-page';
-import { test} from '../fixtures/my-fixtures';
+import { test } from '../fixtures/my-fixtures';
+import { UserAccount } from '../data-objects/user-account';
 
 test('Verify users can buy multiple item successfully', async ({ page, clearCart }) => {
-  
+
   const homePage = new HomePage(page)
   const loginPage = new LoginPage(page);
   const shopPage = new ShopPage(page);
@@ -17,42 +18,41 @@ test('Verify users can buy multiple item successfully', async ({ page, clearCart
   const checkoutPage = new CheckoutPage(page);
   const oderStatusPage = new OrderStatusPage(page);
   const billingDetails = {
-      firstName: 'Nga',
-      lastName: 'Le',
-      company: 'AGEST',
-      country: 'Vietnam',
-      address1: '253 hoang van thu',
-      address2: '253 hoang van thu',
-      zipcode: '22222',
-      city: 'HCM',
-      phone: '+123456789',
-      email: 'nga.thuy.le@agest.vn',
-      odernote: 'NA',
-}
+    firstName: 'Nga',
+    lastName: 'Le',
+    company: 'AGEST',
+    country: 'Vietnam',
+    address1: '253 hoang van thu',
+    address2: '253 hoang van thu',
+    zipcode: '22222',
+    city: 'HCM',
+    phone: '+123456789',
+    email: 'nga.thuy.le@agest.vn',
+    odernote: 'NA',
+  }
 
   // 1. Open browser and go to https://demo.testarchitect.com/
   // 2. Login with valid credentials 
   await homePage.goToLogin();
-  await loginPage.submitlogin('nga.thuy.le@agest.vn', 'nga.thuy.le');
+  await loginPage.submitlogin(UserAccount.username, UserAccount.password);
   await clearCart();
 
   // 3. Go to Shop page
   await loginPage.gotoShop();
-   
+
   // 4. Select multiple items and add to cart
 
   await shopPage.addToCartMultipleItems(["Bose SoundLink Mini", "HP LaserJet P1102 (CE651A)"]);
   // 5. Go to the cart and verify all selected items
   await shopPage.gotoCart();
-  await cartPage.assertProductsInCart(["Bose SoundLink Mini", "HP LaserJet P1102 (CE651A)"]);
+  await cartPage.checkProductsInCart(["Bose SoundLink Mini", "HP LaserJet P1102 (CE651A)"]);
 
   // 6. Proceed to checkout and confirm order
   await cartPage.clickToCheckout();
   await checkoutPage.fillBillingForm(billingDetails, PaymentMethod.CP);
-    await page.pause();
   await checkoutPage.placeOrder();
 
   // 7. Verify order confirmation message
-  await oderStatusPage.assertPageDisplayed();
+  await oderStatusPage.checkPageDisplayed();
 
 });

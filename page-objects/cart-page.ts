@@ -1,4 +1,4 @@
-import { expect, Page, Locator} from '@playwright/test';
+import { expect, Page, Locator } from '@playwright/test';
 import { BasePage } from './base-page';
 import { Product } from "../data-objects/product";
 
@@ -6,17 +6,19 @@ export class CartPage extends BasePage {
     private readonly checkoutButton: Locator;
     private readonly clearShoppingCartButton: Locator;
     private readonly updateCartButton: Locator;
+    private readonly removeButton: Locator;
 
     constructor(page: Page) {
         super(page);
         this.checkoutButton = page.getByRole('link', { name: 'PROCEED TO CHECKOUT' });
-        this.clearShoppingCartButton= page.getByText('Clear shopping cart');
+        this.clearShoppingCartButton = page.getByText('Clear shopping cart');
         this.updateCartButton = page.getByRole('button', { name: 'Update cart' });
+        this.removeButton = page.getByRole('link', { name: 'Remove' });
     }
 
-    async assertFirstProductInCart(firstProduct: Product) {
+    async checkFirstProductInCart(firstProduct: Product) {
 
-        const firstRow = this.page.getByRole('row').filter({ has: this.page.getByRole('link', { name: 'Remove'})}).nth(0);
+        const firstRow = this.page.getByRole('row').filter({ has: this.page.getByRole('link', { name: 'Remove' }) }).nth(0);
         const actualName = await firstRow.getByRole('link').nth(1).innerText();;
         const priceText = await firstRow.getByRole('cell').nth(2).innerText();
         const actualPrice = parseFloat(priceText.replace(/[^0-9.-]+/g, ''));
@@ -31,27 +33,26 @@ export class CartPage extends BasePage {
         await this.checkoutButton.click();
     }
 
-    async assertProductsInCart(items: string[]) {
+    async checkProductsInCart(items: string[]) {
         for (let i = 0; i < items.length; i++) {
-            await expect(this.page.getByRole('row').filter({ has: this.page.getByRole('link', { name: 'Remove'})}).filter({ hasText: items[i] })).toBeVisible();
+            await expect(this.page.getByRole('row').filter({ has: this.page.getByRole('link', { name: 'Remove' }) }).filter({ hasText: items[i] })).toBeVisible();
         }
     }
 
     async clearAllProducts() {
         await this.page.waitForLoadState('load');
-        const removeButton = await this.page.getByRole('link', { name: 'Remove' });
-        const removeNumber= await removeButton.count();
+        const removeNumber = await this.removeButton.count();
         for (let i = 0; i < removeNumber; i++) {
-            await this.page.getByRole('link', { name: 'Remove' }).nth(0).click();
+            await this.removeButton.nth(0).click();
             await this.page.waitForLoadState('load');
-        }        
+        }
     }
 
     async clickClearCart() {
         await this.clearShoppingCartButton.click();
     }
 
-    async assertQuantityProduct(productName: string, quantity: number) {
+    async checkQuantityProduct(productName: string, quantity: number) {
         const quantityText = await (this.page.getByRole('spinbutton', { name: productName })).inputValue();
         const quantityNumber = parseInt(quantityText, 10);
         expect(quantityNumber).toBe(quantity);
@@ -59,18 +60,18 @@ export class CartPage extends BasePage {
 
     async clickPlusQuantity(productName: string) {
         await this.page.waitForLoadState('load');
-        await this.page.getByRole('cell', { name: ` ${productName}`}).locator('span').nth(1).click({timeout: 30_000});
+        await this.page.getByRole('cell', { name: ` ${productName}` }).locator('span').nth(1).click({ timeout: 30_000 });
         await this.page.waitForLoadState('load');
     }
 
-        async clickMinusQuantity(productName: string) {
+    async clickMinusQuantity(productName: string) {
         await this.page.waitForLoadState('load');
-        await this.page.getByRole('cell', { name: ` ${productName}`}).locator('span').nth(0).click({timeout: 30_000});
+        await this.page.getByRole('cell', { name: ` ${productName}` }).locator('span').nth(0).click({ timeout: 30_000 });
         await this.page.waitForLoadState('load');
     }
 
-    async assertSubTotal(productName: string, price: number) {
-        const priceText = await this.page.getByRole('row').filter({ has: this.page.getByRole('link', { name: 'Remove'})}).filter({ hasText: productName }).getByRole('cell').nth(4).innerText();
+    async checkSubTotal(productName: string, price: number) {
+        const priceText = await this.page.getByRole('row').filter({ has: this.page.getByRole('link', { name: 'Remove' }) }).filter({ hasText: productName }).getByRole('cell').nth(4).innerText();
         const actualPrice = parseFloat(priceText.replace(/[^0-9.-]+/g, ''));
         expect(actualPrice).toBe(price);
     }

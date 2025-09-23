@@ -5,6 +5,7 @@ import { CartPage } from '../page-objects/cart-page';
 import { CheckoutPage } from '../page-objects/checkout-page';
 import { HomePage } from '../page-objects/home-page';
 import { ProductPage } from '../page-objects/product-page';
+import { UserAccount } from '../data-objects/user-account';
 
 test('Verify users can post a review', async ({ page }) => {
   const homePage = new HomePage(page)
@@ -17,11 +18,11 @@ test('Verify users can post a review', async ({ page }) => {
   // 1. Open browser and go to https://demo.testarchitect.com/
   // 2. Login with valid credentials 
   await homePage.goToLogin();
-  await loginPage.submitlogin('nga.thuy.le@agest.vn', 'nga.thuy.le');
+  await loginPage.submitlogin(UserAccount.username, UserAccount.password);
 
   // 3. Go to Shop page
   await loginPage.gotoShop();
-   
+
   // 4. Click on a product to view detail
   await shopPage.clickAProduct('Bose SoundLink Mini');
 
